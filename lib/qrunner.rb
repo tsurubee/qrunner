@@ -63,10 +63,10 @@ def fetch_diff_files
   `git fetch`
   to = 'HEAD'
   from = if ENV['DRONE_BRANCH'] == 'master'
-           # masterマージの際、droneではマージコミット後の状態が見えているため、その前のマージコミットとHEADの差分を取る
+           # When merging to the master, since CI operates in the state after merge, take the difference from the merge commit two times before.  
            `git log -n 2 --pretty=oneline --merges #{to} | tail -n 1 | awk '{print $1}'`.chomp
          else
-           # master以外のブランチにpushした際は、ブランチのHEADとmasterのHEADの差分を取る
+           # When pushing to a branch other than master, take the difference between the branch and master's HEAD.
            'origin/master'
          end
   `git diff #{from}..#{to} --name-only --diff-filter=A | grep -v '^db/'`.split("\n")
