@@ -7,7 +7,7 @@ require 'net/ssh/gateway'
 def run_query
   prepare_db_schema if local_exec?
   puts '=' * 30,
-       'sending queries',
+       "sending queries for #{host}",
        query,
        '=' * 30
   @port = gateway.open(host, port, 3307) if gateway? && !local_exec?
@@ -21,7 +21,7 @@ rescue StandardError => e
   raise e
 ensure
   mysql_client.close
-  gateway.shutdown! if gateway? && !test_query?
+  gateway.shutdown! if gateway? && !local_exec?
 end
 
 def prepare_db_schema
@@ -90,7 +90,7 @@ def mysql_client
 end
 
 def host
-  local_exec? ? '127.0.0.1' : server_config[service][host_name].split(':').first
+  @host ||= local_exec? ? '127.0.0.1' : server_config[service][host_name].split(':').first
 end
 
 def port
