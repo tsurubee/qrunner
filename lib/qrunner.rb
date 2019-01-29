@@ -126,7 +126,7 @@ def host_name
 end
 
 def local_exec?
-  exec_mode == 'local'
+  exec_mode != 'remote'
 end
 
 def gateway?
