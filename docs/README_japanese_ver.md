@@ -2,6 +2,10 @@
 ## 1. `.drone.yml`
 qrunnerの実行の起点は`.drone.yml`になるため、qrunnerを正しく動作させるためには`.drone.yml`を正しく書く必要がある。  
 サンプルは[ここ](../.drone.yml)に置いている。  
+主な設定ポイントは以下
+- localhostへのテスト用にMySQLのコンテナを`MYSQL_ALLOW_EMPTY_PASSWORD=yes`で上げる
+- masterブランチの時のみ`EXEC_MODE=remote`とする（リモートサーバにクエリを実行するのはmasterマージのときだけにする）
+- remote実行の際は、`MYSQL_USER`と`MYSQL_PASSWORD`を`.drone.sec`から受け取るようにする
 
 ### 環境変数について
 qrunnerの動作を制御する環境変数は`.drone.yml`で設定が可能である。  
