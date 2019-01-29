@@ -4,6 +4,9 @@ Currently qrunner is supposed to work in conjunction with Drone CI and MySQL.
 An example of Drone's configuration file is [here](.drone.yml).  
 
 ## Configuration
+
+※ Japanese version [here](docs/README_japanese_ver.md).  
+
 ### Environment variables (can overwrite by `.drone.yml`)
 
 | variables | example values | description |
