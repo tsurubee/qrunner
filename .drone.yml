@@ -1,0 +1,30 @@
+build:
+  test:
+    image: tsurubee/qrunner:latest
+    environment:
+      - EXEC_MODE=local
+    commands:
+      - sleep 15 # Wait for MySQL container to start up（ref. https://0-8-0.docs.drone.io/mysql-example/）
+      - if [ "$DRONE_BRANCH" = 'master' ]; then exit 0; fi # Skip the local test at master branch
+      - ruby /usr/local/qrunner/qrunner.rb
+
+  run_query:
+    image: tsurubee/qrunner:latest
+    environment:
+      - EXEC_MODE=remote
+      - MYSQL_USER=$$MYSQL_USER
+      - MYSQL_PASSWORD=$$MYSQL_PASSWORD
+    commands:
+      - ruby /usr/local/qrunner/qrunner.rb
+    when:
+      branch:
+        - master
+cache:
+  mount:
+    - /tmp/bundle
+
+compose:
+  mysql:
+    image: mysql:5.6
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
