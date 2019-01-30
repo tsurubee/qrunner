@@ -90,7 +90,7 @@ def mysql_client
 end
 
 def host
-  @host ||= local_exec? ? '127.0.0.1' : server_config[service][host_name].split(':').first
+  @host ||= local_exec? or gateway? ? '127.0.0.1' : server_config[service][host_name].split(':').first
 end
 
 def port
