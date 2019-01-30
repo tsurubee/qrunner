@@ -53,7 +53,7 @@ end
 
 def sqlfile
   unless @sqlfile
-    fetched = fetch_diff_files.grep(/.sql$/)
+    fetched = fetch_diff_files.grep(/^#{queries_dir}/).grep(/.sql$/)
     @sqlfile =
       case
         fetched.size
@@ -90,7 +90,7 @@ def mysql_client
 end
 
 def host
-  @host ||= local_exec? or gateway? ? '127.0.0.1' : server_config[service][host_name].split(':').first
+  @host ||= (local_exec? or gateway?) ? '127.0.0.1' : server_config[service][host_name].split(':').first
 end
 
 def port
@@ -118,11 +118,11 @@ def servers_info
 end
 
 def service
-  sqlfile.split('/')[0]
+  sqlfile.split('/')[1]
 end
 
 def host_name
-  sqlfile.split('/')[1]
+  sqlfile.split('/')[2]
 end
 
 def local_exec?
@@ -146,6 +146,10 @@ def gateway
     ssh_host,
     ssh_user
   )
+end
+
+def queries_dir
+  @queries_dir ||= ENV.fetch('QUERIES_DIR', 'queries')
 end
 
 def schema_dir

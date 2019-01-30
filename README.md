@@ -12,6 +12,7 @@ An example of Drone's configuration file is [here](.drone.yml).
 | variables | example values | description |
 | --------- | ------ | ----------- |
 | `EXEC_MODE` | `local` or `remote` | In case of `local`, run query for the localhost MySQL for testing |
+| `QUERIES_DIR` | `queries` | QUERIES_DIR indicates a directory for placing the query to be executed |
 | `SCHEMA_DIR` | `schema` | Under `SCHEMA_DIR` is used for testing (when `EXEC_MODE = 'local'`).  The file name is assumed to be the same as the DB name |
 | `SERVERS_INFO` | `servers.toml` | Server connection information (it must be a toml format file) |
 | `MYSQL_USER`| `root` | Username of MySQL |
