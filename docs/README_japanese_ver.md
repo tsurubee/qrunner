@@ -14,6 +14,7 @@ qrunnerの動作を制御する環境変数は`.drone.yml`で設定が可能で�
 | 変数名 | 値 | 説明 |
 | --------- | ------ | ----------- |
 | `EXEC_MODE` | `local` or `remote`[Default: `local`] | 実行モード。`local`の場合はlocalhost上に起動したMySQLに対してクエリのテストを行う |
+| `QUERIES_DIR` | `queries` | QUERIES_DIRは実行するクエリを置くためのディレクトリ |
 | `MYSQL_USER`| `MySQLのユーザ名`[Default: `root`] | - |
 | `MYSQL_PASSWORD`| `MySQLのパスワード`[Default: `""`] | [`.drone.sec`](https://docs.tea-ci.org/usage/secrets/)から取得するようにした方が良い |
 | `SCHEMA_DIR` | `ディレクトリ名`[Default: `schema`] | localhostにクエリの実行テストを行う際に用いるDBスキーマを格納するディレクトリ |
@@ -44,6 +45,6 @@ MySQLが起動しているポート番号を`:`の後に指定できる。（指
 ### SQLファイルの配置
 追加するSQLファイルは以下の命名規則に従い配置する。
 ```
-サービス名/DBホストを一意に表すキー/日付_任意の文字列（テーブル名など）.sql
+QUERIES_DIR(デフォルト:queries)/サービス名/DBホストを一意に表すキー/日付_任意の文字列（テーブル名など）.sql
 ```
 ファイル名は実行には関係なく、ユニークな名前を付ければ良いため、日時などを用いると良い。  
