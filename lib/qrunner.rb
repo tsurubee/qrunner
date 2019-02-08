@@ -25,10 +25,12 @@ ensure
 end
 
 def prepare_db_schema
-  Dir.foreach(schema_dir) { |db|
+  target_dir = schema_dir + "/#{service}/#{host_name}"
+  Dir.foreach(target_dir) { |db|
     next if db == '.' or db == '..'
     mysql_client.query("CREATE DATABASE #{db};")
-    `mysql -u#{mysql_username} -h#{host} -P#{port} #{db} < #{schema_dir}/#{db}`
+    `mysql -u#{mysql_username} -h#{host} -P#{port} #{db} < #{target_dir}/#{db}`
+    puts "preparing DB named #{db} for local test"
   }
 end
 
