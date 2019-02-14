@@ -10,7 +10,7 @@ def run_query
        "sending queries for #{host}",
        query,
        '=' * 30
-  @port = gateway.open(host, port, 3307) if gateway? && !local_exec?
+  @port = gateway.open(host, port, gateway_local_port) if gateway? && !local_exec?
   transaction do
     mysql_client.query(query)
     mysql_client.store_result while mysql_client.next_result
@@ -92,12 +92,12 @@ def mysql_client
 end
 
 def host
-  @host ||= (local_exec? or gateway?) ? '127.0.0.1' : server_config[service][host_name].split(':').first
+  @host ||= (local_exec? or gateway?) ? '127.0.0.1' : server_config[service][host_name]['host_name']
 end
 
 def port
-  @port ||= if !local_exec? && server_config[service][host_name].include?(':')
-              server_config[service][host_name].split(':').last
+  @port ||= if !local_exec? && server_config[service][host_name].key?('port')
+              server_config[service][host_name]['port']
             else
               3306
             end
@@ -112,7 +112,7 @@ def mysql_password
 end
 
 def server_config
-  TomlRB.load_file(servers_info)
+  @server_config ||= TomlRB.load_file(servers_info)
 end
 
 def servers_info
@@ -132,15 +132,15 @@ def local_exec?
 end
 
 def gateway?
-  server_config[service].key?('ssh_gateway')
+  server_config[service][host_name].key?('ssh_gateway')
 end
 
 def ssh_host
-  server_config[service]['ssh_gateway'].split('@').last
+  server_config[service][host_name]['ssh_gateway'].split('@').last
 end
 
 def ssh_user
-  server_config[service]['ssh_gateway'].split('@').first
+  server_config[service][host_name]['ssh_gateway'].split('@').first
 end
 
 def gateway
@@ -148,6 +148,10 @@ def gateway
     ssh_host,
     ssh_user
   )
+end
+
+def gateway_local_port
+  @gateway_local_port ||= ENV.fetch('GATEWAY_LOCAL_PORT', 3307)
 end
 
 def queries_dir

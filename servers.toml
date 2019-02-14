@@ -1,2 +1,6 @@
 [myservice]
-mydb = "mydb.tsurubee.jp:3307"
+
+[[myservice.mydb]]
+host_name = "mydb.tsurubee.jp"
+port = 3307
+ssh_gateway = "qrunner@ssh-gateway.tsurubee.jp"
