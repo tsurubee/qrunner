@@ -7,7 +7,7 @@ require 'net/ssh/gateway'
 def run_query
   prepare_db_schema if local_exec?
   puts '=' * 40,
-       "sending queries for #{host}:#{port}",
+       "sending queries for #{host}",
        query,
        '=' * 40
   @port = gateway.open(host, port, gateway_local_port) if gateway? && !local_exec?
