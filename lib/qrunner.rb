@@ -6,10 +6,10 @@ require 'net/ssh/gateway'
 
 def run_query
   prepare_db_schema if local_exec?
-  puts '=' * 30,
-       "sending queries for #{host}",
+  puts '=' * 40,
+       "sending queries for #{host}:#{port}",
        query,
-       '=' * 30
+       '=' * 40
   @port = gateway.open(host, port, gateway_local_port) if gateway? && !local_exec?
   transaction do
     mysql_client.query(query)
