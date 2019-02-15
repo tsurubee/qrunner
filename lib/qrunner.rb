@@ -84,7 +84,7 @@ def fetch_diff_files
 end
 
 def mysql_client
-  @mysql_client ||= Mysql2::Client.new(host: host,
+  @mysql_client ||= Mysql2::Client.new(host: gateway? ? '127.0.0.1' : host,
                                        port: port,
                                        username: mysql_username,
                                        password: mysql_password,
@@ -92,7 +92,7 @@ def mysql_client
 end
 
 def host
-  @host ||= (local_exec? or gateway?) ? '127.0.0.1' : server_config[service][host_name]['host_name']
+  @host ||= local_exec? ? '127.0.0.1' : server_config[service][host_name]['host_name']
 end
 
 def port
