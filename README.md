@@ -22,9 +22,11 @@ An example of Drone's configuration file is [here](.drone.yml).
 Sample is [Here](servers.toml).  
 ```
 [service_name]
-mydb = "<Hostname or IP address>[:port]"
+[service_name.mydb]
+host_name = "<Hostname or IP address>"
+port = <port number>
+ssh_gateway = "<SSH username>@<SSH hostname>"
 ```
-You can specify the port on which MySQL is running after the  `:`. (If not specified the default is 3306)  
 `mydb` is a key name that uniquely indicates the DB server and is used as the directory name of the place of the query.  (Describe later)  
 
 ### How to prepare execute SQL file
