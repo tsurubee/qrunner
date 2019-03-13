@@ -74,8 +74,16 @@ def fetch_diff_files
   `git fetch`
   to = 'HEAD'
   from = if ENV['DRONE_BRANCH'] == 'master'
-           # When merging to the master, since CI operates in the state after merge, take the difference from the merge commit two times before.
-           `git log -n 2 --pretty=oneline --merges #{to} | tail -n 1 | awk '{print $1}'`.chomp
+           # Do not return differences if the last commit is not a merge commit (ex. pushing directly to the master)
+           last_commit       = `git log -n 1 --pretty=oneline #{to} | awk '{print $1}'`
+           last_merge_commit = `git log -n 1 --pretty=oneline --merges #{to} | awk '{print $1}'`
+           if last_commit == last_merge_commit
+             # When merging to the master, since CI operates in the state after merge, take the difference from the merge commit two times before.
+             `git log -n 2 --pretty=oneline --merges #{to} | tail -n 1 | awk '{print $1}'`.chomp
+           else
+             puts "This is not a merge commit, so do not execute the query"
+             'HEAD'
+           end
          else
            # When pushing to a branch other than master, take the difference between the branch and master's HEAD.
            'origin/master'
