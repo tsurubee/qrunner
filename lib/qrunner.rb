@@ -30,7 +30,13 @@ def parse_query(q)
   q.gsub!(/--\s.*$/, "")
   q.gsub!(/#.*$/, "")
   q.gsub!(/(\r\n|\r|\n)/, "")
-  q.split(';', -1)[0..-2]
+  # if the last element does not contain string, remove it.
+  list = q.split(';')
+  if list[-1] =~ /\S+/
+    list
+  else
+    list[0..-2]
+  end
 end
 
 def prepare_db_schema
