@@ -6,14 +6,16 @@ require 'net/ssh/gateway'
 
 def run_query
   prepare_db_schema if local_exec?
-  puts '=' * 40,
-       "sending queries for #{host}",
-       query,
-       '=' * 40
   @port = gateway.open(host, port, gateway_local_port) if gateway? && !local_exec?
   transaction do
-    mysql_client.query(query)
-    mysql_client.store_result while mysql_client.next_result
+    query_list = query.gsub(/[\r\n]/, "").split(';')
+    puts '=' * 40,
+         "sending queries for #{host}"
+    query_list.each_with_index { |q, i|
+      mysql_client.query("#{q};")
+      puts "#{i + 1}: #{q};"
+    }
+    puts '=' * 40
   end
 rescue SystemExit => e
   puts e
@@ -95,8 +97,7 @@ def mysql_client
   @mysql_client ||= Mysql2::Client.new(host: gateway? ? '127.0.0.1' : host,
                                        port: port,
                                        username: mysql_username,
-                                       password: mysql_password,
-                                       flags: Mysql2::Client::MULTI_STATEMENTS)
+                                       password: mysql_password)
 end
 
 def host
