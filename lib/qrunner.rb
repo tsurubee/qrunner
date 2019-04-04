@@ -8,7 +8,7 @@ def run_query
   prepare_db_schema if local_exec?
   @port = gateway.open(host, port, gateway_local_port) if gateway? && !local_exec?
   transaction do
-    query_list = query.gsub(/[\r\n]/, "").split(';')
+    query_list = query.gsub(/(\r\n|\r|\n)/, "").split(';')
     puts '=' * 40,
          "sending queries for #{host}"
     query_list.each_with_index { |q, i|
