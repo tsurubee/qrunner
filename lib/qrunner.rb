@@ -30,8 +30,8 @@ def parse_query(q)
   q.gsub!(/--\s.*$/, "")
   q.gsub!(/#.*$/, "")
   q.gsub!(/(\r\n|\r|\n)/, "")
-  # if the last element does not contain string, remove it.
   list = q.split(';')
+  # if the last element does not contain string, remove it.
   if list[-1] =~ /\S+/
     list
   else
