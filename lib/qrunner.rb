@@ -8,7 +8,7 @@ def run_query
   prepare_db_schema if local_exec?
   @port = gateway.open(host, port, gateway_local_port) if gateway? && !local_exec?
   transaction do
-    query_list = query.gsub(/(\r\n|\r|\n)/, "").split(';')
+    query_list = parse_query(query)
     puts '=' * 40,
          "sending queries for #{host}"
     query_list.each_with_index { |q, i|
@@ -24,6 +24,13 @@ rescue StandardError => e
 ensure
   mysql_client.close
   gateway.shutdown! if gateway? && !local_exec?
+end
+
+def parse_query(q)
+  q.gsub!(/--\s.*$/, "")
+  q.gsub!(/#.*$/, "")
+  q.gsub!(/(\r\n|\r|\n)/, "")
+  q.split(';', -1)[0..-2]
 end
 
 def prepare_db_schema
