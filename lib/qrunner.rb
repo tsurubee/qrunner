@@ -9,13 +9,13 @@ def run_query
   @port = gateway.open(host, port, gateway_local_port) if gateway? && !local_exec?
   transaction do
     query_list = parse_query(query)
-    puts '=' * 40,
+    puts '=' * 80,
          "sending queries for #{host}"
     query_list.each_with_index { |q, i|
       mysql_client.query("#{q};")
-      puts "#{i + 1}: #{q};"
+      puts "#{i + 1}:\n #{q};"
     }
-    puts '=' * 40
+    puts '=' * 80
   end
 rescue SystemExit => e
   puts e
@@ -27,9 +27,6 @@ ensure
 end
 
 def parse_query(q)
-  q.gsub!(/--\s.*$/, "")
-  q.gsub!(/#.*$/, "")
-  q.gsub!(/(\r\n|\r|\n)/, "")
   list = q.split(';')
   # if the last element does not contain string, remove it.
   if list[-1] =~ /\S+/
