@@ -1,5 +1,7 @@
 FROM ruby:2.6
 
+ENV RUBYOPT -EUTF-8
+
 RUN apt-get update && apt-get -y install mysql-client
 
 RUN mkdir -p /usr/local/qrunner
