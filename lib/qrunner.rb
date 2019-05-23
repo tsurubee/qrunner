@@ -12,8 +12,10 @@ def run_query
     puts '=' * 80,
          "sending queries for #{host}"
     query_list.each_with_index { |q, i|
-      mysql_client.query("#{q};")
       puts "#{i + 1}:\n #{q};"
+      q.encode!(encoding) if do_encoding?
+      mysql_client.query("#{q};")
+
     }
     puts '=' * 80
   end
@@ -108,7 +110,7 @@ def mysql_client
                                        port: port,
                                        username: mysql_username,
                                        password: mysql_password,
-                                       encoding: charset_name)
+                                       encoding: mysql_charset)
 end
 
 def host
@@ -123,8 +125,16 @@ def port
             end
 end
 
-def charset_name
-  @charset_name ||= server_config[service][host_name]['charset_name'] || 'utf8'
+def mysql_charset
+  @charset_name ||= server_config[service][host_name]['mysql_charset'] || 'utf8'
+end
+
+def encoding
+  @encoding ||= server_config[service][host_name]['encoding'] || 'UTF-8'
+end
+
+def do_encoding?
+  mysql_charset != 'utf8' && encoding != 'UTF-8'
 end
 
 def mysql_username
