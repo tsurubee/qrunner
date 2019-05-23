@@ -107,7 +107,8 @@ def mysql_client
   @mysql_client ||= Mysql2::Client.new(host: gateway? ? '127.0.0.1' : host,
                                        port: port,
                                        username: mysql_username,
-                                       password: mysql_password)
+                                       password: mysql_password,
+                                       encoding: mysql_charset)
 end
 
 def host
@@ -120,6 +121,10 @@ def port
             else
               3306
             end
+end
+
+def mysql_charset
+  @mysql_charset ||= server_config[service][host_name]['mysql_charset'] || 'utf8'
 end
 
 def mysql_username
