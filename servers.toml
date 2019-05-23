@@ -4,3 +4,4 @@
 host_name = "mydb.tsurubee.jp"
 port = 3307
 ssh_gateway = "qrunner@ssh-gateway.tsurubee.jp"
+charset_name = "ujis"

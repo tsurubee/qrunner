@@ -107,7 +107,8 @@ def mysql_client
   @mysql_client ||= Mysql2::Client.new(host: gateway? ? '127.0.0.1' : host,
                                        port: port,
                                        username: mysql_username,
-                                       password: mysql_password)
+                                       password: mysql_password,
+                                       encoding: charset_name)
 end
 
 def host
@@ -120,6 +121,10 @@ def port
             else
               3306
             end
+end
+
+def charset_name
+  @charset_name ||= server_config[service][host_name]['charset_name'] || 'utf8'
 end
 
 def mysql_username
@@ -184,6 +189,5 @@ end
 def exec_mode
   @exec_mode ||= ENV.fetch('EXEC_MODE', 'local')
 end
-
 
 run_query if $PROGRAM_NAME == __FILE__
