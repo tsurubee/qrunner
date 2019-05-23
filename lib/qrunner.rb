@@ -124,7 +124,7 @@ def port
 end
 
 def mysql_charset
-  @charset_name ||= server_config[service][host_name]['mysql_charset'] || 'utf8'
+  @mysql_charset ||= server_config[service][host_name]['mysql_charset'] || 'utf8'
 end
 
 def mysql_username
