@@ -190,4 +190,5 @@ def exec_mode
   @exec_mode ||= ENV.fetch('EXEC_MODE', 'local')
 end
 
+
 run_query if $PROGRAM_NAME == __FILE__
